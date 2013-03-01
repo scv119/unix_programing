@@ -2,6 +2,7 @@
 #include <utmpx.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #define SHOWHOST
 
@@ -27,14 +28,14 @@ int main()
 
 void show_info(struct utmpx* record)
 {
-    printf("%-8.8s", record->ut_user);
+    printf("%s", record->ut_user);
     printf(" ");
-    printf("%-8.8s", record->ut_line);
+    printf("%s", record->ut_id);
     printf(" ");
-    printf("%-8.8s", record->ut_type);
+    printf("%d", record->ut_type);
 #ifdef SHOWHOST
     printf(" ");
-    printf("%-8.8s", record->ut_host);
+    printf("%s", record->ut_host);
 #endif
     printf("\n");
 }
