@@ -1,12 +1,13 @@
 #include <dirent.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
-void do_ls(const char*);
-void dostat(char *);
-void show_file_info(char*, struct stat*);
-void mode_to_letters(int, char[]);
-char * uid_to_name(uid_t);
-char * gid_to_name(gid_t);
+void do_ls();
+void dostat();
+void show_file_info();
+void mode_to_letters();
+char * uid_to_name();
+char * gid_to_name();
 
 int main(int argc, char *argv[])
 {
@@ -59,14 +60,14 @@ void show_file_info(char* filename, struct stat * info_p)
     printf("%s\n", filename);
 }
 
-void mode_to_letters(int mod, char str[])
+void mode_to_letters(int mode, char str[])
 {
     strcpy(str, "---------");
     if (S_ISDIR(mode)) str[0] = 'd';
     if (S_ISCHR(mode)) str[0] = 'c';
     if (S_ISBLK(mode)) str[0] = 'b';
 
-    if (mode & S_ISUSR) str[1] = 'r';
+    if (mode & S_IRUSR) str[1] = 'r';
     if (mode & S_IWUSR) str[2] = 'w';
     if (mode & S_IXUSR) str[3] = 'x';
 
@@ -101,7 +102,7 @@ char *gid_to_name(gid_t gid)
     struct group *getgrgid(), *grp_ptr;
     static char numstr[10];
 
-    if ((grp_ptr = getgrpgid(gid)) == NULL) {
+    if ((grp_ptr = getgrgid(gid)) == NULL) {
         sprintf(numstr, "%d", gid);
         return numstr;
     } else
